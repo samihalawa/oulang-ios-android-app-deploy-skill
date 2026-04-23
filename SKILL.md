@@ -75,6 +75,9 @@ gh workflow run deploy.yml --ref main --field deploy_target=android
 gh workflow run deploy.yml --ref main --field deploy_target=ios
 ```
 
+Prefer `workflow_dispatch` over creating a `v*` tag just to trigger release automation.
+The workflow also listens to release tags, but dispatch is the safer default because it avoids accidental duplicate release runs and keeps the target explicit.
+
 Why this is preferred:
 
 - it already materializes release assets from the root `.env`
@@ -101,6 +104,9 @@ Those lanes already:
 - increment Android versionCode from Play
 - increment iOS build number from TestFlight
 - upload to Play / App Store Connect
+
+Do not hand-edit Android `versionCode` or iOS `CURRENT_PROJECT_VERSION` unless you are repairing a broken release state.
+The root Fastlane production lanes already own the normal build-number bump path.
 
 For local iOS fallback, keep the real repo preconditions explicit:
 
@@ -181,6 +187,7 @@ Then inspect the run:
 ```bash
 gh run list --workflow deploy.yml --limit 5
 gh run watch <run-id>
+gh run view <run-id> --log-failed
 ```
 
 If the user wants only one store, trigger only that target.
