@@ -1,0 +1,4 @@
+interface:
+  display_name: "Oulang iOS Android App Deploy"
+  short_description: "Ship Oulang web and mobile releases using the repo's real GitHub Actions and Fastlane flow"
+  default_prompt: "Use $oulang-ios-android-app-deploy-skill when the user wants to commit, push, redeploy Oulang, trigger Android and iOS store builds, or submit a new app version using the workflow that already works in the repo. Ground the work in the current Oulang README, AGENTS.md, package.json, fastlane/Fastfile, ios/App/fastlane/Fastfile, .github/workflows/deploy.yml, and the current .env-backed asset materialization path. Prefer git push to main for web and gh workflow run deploy.yml for mobile, with the root Fastlane lanes only as a fallback or when local execution is explicitly needed. Report exact release stage truthfully, especially the difference between upload, processing, and App Store review submission."
