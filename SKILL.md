@@ -102,6 +102,12 @@ Those lanes already:
 - increment iOS build number from TestFlight
 - upload to Play / App Store Connect
 
+For local iOS fallback, keep the real repo preconditions explicit:
+
+- run from a Mac with Xcode available
+- ensure release signing material can be materialized from the root `.env`
+- make sure pods are installed in `ios/App` before treating a local iOS release as blocked by Fastlane itself
+
 ## iOS Review Submission Rule
 
 Be exact about stage truth.
@@ -174,7 +180,7 @@ Then inspect the run:
 
 ```bash
 gh run list --workflow deploy.yml --limit 5
-gh run watch
+gh run watch <run-id>
 ```
 
 If the user wants only one store, trigger only that target.
@@ -203,6 +209,14 @@ APPLE_SUBMIT_FOR_REVIEW=true pnpm run fastlane:ios:production
 
 Only use this fallback when it is actually needed.
 
+If local iOS execution is used, ensure repo-native prerequisites are satisfied first:
+
+```bash
+cd ios/App && pod install
+```
+
+Do not misdiagnose a missing pod install or missing local signing material as a broken Fastlane lane.
+
 ### 6. Verify Exact Stage
 
 Always report the true stage:
@@ -230,6 +244,12 @@ curl -sI 'https://oulang.ai' | grep -iE 'x-cloud-trace|last-modified|etag'
 ```
 
 For mobile, verify through GitHub Actions run state first, then any available store-upload evidence.
+
+Remember the current workflow default:
+
+- Android CI path uploads production to Play
+- iOS CI path uploads to App Store Connect
+- iOS CI path does not automatically submit for review unless the execution path is explicitly changed to do that
 
 ## Release Asset Rules
 
